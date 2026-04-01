@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>UMENO · Lucas Silva de Carvalho</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,500&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F7F4EF;--surface:#FFFFFF;--text-1:#1A1410;--text-2:#7A6E62;--text-3:#B8B0A8;--accent:#B87A18;--a10:rgba(184,122,24,0.10);--a20:rgba(184,122,24,0.20);--border:rgba(26,20,16,0.08);--ba:rgba(184,122,24,0.22);--shadow:0 2px 16px rgba(26,20,16,0.06);--shadowlg:0 8px 40px rgba(26,20,16,0.10);--r:12px;--rlg:20px;--pill:999px;--food:#D4845A;--tech:#4A7FA5;--health:#5A9E6F;--music:#8B5E9E;--finance:#4A7A6A;--belem:#2E7D52}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased;height:100%}
+body{background:var(--bg);color:var(--text-1);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.6;min-height:100vh;overflow-x:hidden}
+button{cursor:pointer;font-family:'DM Sans',sans-serif;border:none}
+input,textarea{font-family:'DM Sans',sans-serif}
+.app{display:grid;grid-template-columns:260px 1fr 300px;grid-template-rows:56px 1fr;height:100vh;overflow:hidden}
+@media(max-width:1100px){.app{grid-template-columns:56px 1fr}.sr{display:none}}
+@media(max-width:680px){.app{grid-template-columns:1fr;grid-template-rows:56px 1fr 60px}.sl{display:none}.mobnav{display:flex!important}}
+.topbar{grid-column:1/-1;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;gap:16px;position:sticky;top:0;z-index:50}
+.tlogo{font-family:'Newsreader',serif;font-size:20px;font-weight:700;color:var(--accent);letter-spacing:-.01em;white-space:nowrap}
+.tlogo span{color:var(--text-1)}
+.tsearch{flex:1;max-width:400px;background:var(--bg);border:1px solid var(--border);border-radius:var(--pill);padding:8px 16px;font-size:13px;color:var(--text-1);outline:none;transition:border-color .2s}
+.tsearch:focus{border-color:var(--accent)}
+.tsearch::placeholder{color:var(--text-3)}
+.tright{display:flex;align-items:center;gap:12px}
+.tav{width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:'Newsreader',serif;font-weight:700;font-size:13px;color:#fff;cursor:pointer;flex-shrink:0}
+.lbtn{background:var(--accent);color:#fff;padding:7px 18px;border-radius:var(--pill);font-size:13px;font-weight:600;transition:all .2s}
+.lbtn:hover{background:#C8901E}
+.sl{background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;padding:16px 12px;display:flex;flex-direction:column;gap:4px}
+.sl::-webkit-scrollbar{width:3px}.sl::-webkit-scrollbar-thumb{background:var(--border)}
+.ni{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--r);font-size:14px;font-weight:500;color:var(--text-2);cursor:pointer;transition:all .15s;white-space:nowrap}
+.ni:hover{background:var(--bg);color:var(--text-1)}.ni.on{background:var(--a10);color:var(--accent)}
+.ni .ico{font-size:16px;flex-shrink:0}
+.ndiv{height:1px;background:var(--border);margin:8px 4px}
+.nsec{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--text-3);text-transform:uppercase;padding:4px 12px;margin-top:8px}
+.fni{display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:var(--r);font-size:13px;color:var(--text-2);cursor:pointer;transition:all .15s}
+.fni:hover{background:var(--bg);color:var(--text-1)}
+.fni .fdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.fni .fcnt{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-3)}
+.main{overflow-y:auto;display:flex;flex-direction:column}
+.main::-webkit-scrollbar{width:4px}.main::-webkit-scrollbar-thumb{background:var(--border)}
+.view{display:none;flex-direction:column;height:100%}.view.on{display:flex}
+.pcov{height:140px;background:linear-gradient(135deg,rgba(184,122,24,.18) 0%,rgba(212,132,90,.12) 50%,rgba(74,127,165,.12) 100%);flex-shrink:0}
+.pcovi{padding:0 28px}
+.pavwrap{margin-top:-36px;margin-bottom:12px}
+.pav{width:72px;height:72px;border-radius:50%;background:var(--accent);border:4px solid var(--surface);display:flex;align-items:center;justify-content:center;font-family:'Newsreader',serif;font-weight:700;font-size:28px;color:#fff;box-shadow:var(--shadow)}
+.pname{font-family:'Newsreader',serif;font-size:22px;font-weight:700;margin-bottom:2px}
+.phandle{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-3);margin-bottom:8px}
+.pbio{font-size:14px;color:var(--text-2);margin-bottom:16px;max-width:480px}
+.ploc{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-3);font-family:'JetBrains Mono',monospace}
+.pstats{display:flex;gap:24px;padding:16px 0;border-bottom:1px solid var(--border);margin-bottom:20px}
+.pst{text-align:center}.pst strong{display:block;font-family:'Newsreader',serif;font-size:20px;font-weight:700}.pst span{font-size:12px;color:var(--text-3)}
+.pbody{padding:0 28px 28px;flex:1;overflow-y:auto}
+.pbody::-webkit-scrollbar{width:3px}.pbody::-webkit-scrollbar-thumb{background:var(--border)}
+.sectitle{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--text-3);text-transform:uppercase;margin-bottom:12px}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:28px}
+.fc{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;box-shadow:var(--shadow)}
+.fc::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;background:var(--fcc,var(--accent))}
+.fc:hover{transform:translateY(-2px);box-shadow:var(--shadowlg);border-color:var(--ba)}
+.fc .fci{font-size:22px;margin-bottom:8px}.fc .fcn{font-weight:600;font-size:14px;margin-bottom:4px}
+.fc .fcm{display:flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-3)}
+.badge{font-size:10px;padding:2px 8px;border-radius:var(--pill);font-family:'JetBrains Mono',monospace}
+.badge.pub{background:rgba(90,158,111,.12);color:var(--health)}.badge.priv{background:var(--a10);color:var(--accent)}
+.ifeed{display:flex;flex-direction:column;gap:8px}
+.icard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow);transition:all .2s;position:relative}
+.icard:hover{border-color:var(--ba)}
+.icardtop{display:flex;align-items:flex-start;gap:10px;margin-bottom:6px}
+.iplat{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0}
+.ititle{font-weight:600;font-size:14px;line-height:1.4}
+.idesc{font-size:13px;color:var(--text-2);margin-bottom:8px;line-height:1.5}
+.imeta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.itag{background:var(--bg);border:1px solid var(--border);border-radius:var(--pill);padding:2px 10px;font-size:11px;color:var(--text-2);font-family:'JetBrains Mono',monospace}
+.itime{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-3);margin-left:auto}
+.ifchip{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text-2);background:var(--bg);border:1px solid var(--border);border-radius:var(--pill);padding:2px 10px}
+.chatview{display:flex;flex-direction:column;height:100%;position:relative}
+.chatheader{padding:16px 20px;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0}
+.chatheader h3{font-family:'Newsreader',serif;font-size:17px;font-weight:600;margin-bottom:2px}
+.chatheader p{font-size:12px;color:var(--text-2)}
+.chatmsgs{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:12px}
+.chatmsgs::-webkit-scrollbar{width:3px}.chatmsgs::-webkit-scrollbar-thumb{background:var(--border)}
+.cmsg{max-width:75%}.cmsg.user{align-self:flex-end}.cmsg.ai{align-self:flex-start}.cmsg.sys{align-self:center;max-width:90%}
+.cbub{padding:10px 14px;border-radius:16px;font-size:14px;line-height:1.6}
+.cmsg.user .cbub{background:var(--accent);color:#fff;border-bottom-right-radius:4px}
+.cmsg.ai .cbub{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-bottom-left-radius:4px;box-shadow:var(--shadow)}
+.cmsg.sys .cbub{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);font-size:12px;color:var(--text-2);text-align:center}
+.ctime{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-3);margin-top:4px;padding:0 4px}
+.cmsg.user .ctime{text-align:right}
+.saved-box{background:rgba(90,158,111,.08);border:1px solid rgba(90,158,111,.2);border-radius:var(--r);padding:10px 14px;font-size:13px;margin-top:6px}
+.saved-box strong{color:var(--health)}
+.chatia{padding:16px 20px;border-top:1px solid var(--border);background:var(--surface);flex-shrink:0}
+.ciawrap{display:flex;align-items:flex-end;gap:10px}
+.ciata{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:10px 16px;font-size:14px;color:var(--text-1);resize:none;outline:none;min-height:44px;max-height:120px;transition:border-color .2s;line-height:1.5;font-family:'DM Sans',sans-serif}
+.ciata:focus{border-color:var(--accent)}.ciata::placeholder{color:var(--text-3)}
+.ciasend{width:44px;height:44px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:all .2s}
+.ciasend:hover{background:#C8901E;transform:scale(1.05)}.ciasend:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.ciahint{font-size:11px;color:var(--text-3);text-align:center;margin-top:8px;font-family:'JetBrains Mono',monospace}
+.typing{display:flex;align-items:center;gap:4px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:16px;border-bottom-left-radius:4px;width:fit-content}
+.tdot{width:5px;height:5px;border-radius:50%;background:var(--text-3);animation:td 1.2s ease-in-out infinite}
+.tdot:nth-child(2){animation-delay:.2s}.tdot:nth-child(3){animation-delay:.4s}
+@keyframes td{0%,80%,100%{transform:scale(1);opacity:.4}40%{transform:scale(1.4);opacity:1}}
+.fdhead{padding:20px 24px;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0}
+.fdtop{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.fdtico{width:44px;height:44px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:22px}
+.fdtn{font-family:'Newsreader',serif;font-size:20px;font-weight:700}
+.fdtd{font-size:13px;color:var(--text-2)}
+.fdtm{display:flex;gap:16px;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-3)}
+.fitems{padding:16px 20px;flex:1;overflow-y:auto}
+.fitems::-webkit-scrollbar{width:3px}.fitems::-webkit-scrollbar-thumb{background:var(--border)}
+.backbtn{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-2);background:transparent;padding:4px 0;margin-bottom:12px;transition:color .2s}
+.backbtn:hover{color:var(--text-1)}
+.feedhdr{padding:20px 24px 16px;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0}
+.feedhdr h2{font-family:'Newsreader',serif;font-size:20px;font-weight:700}
+.followhdr{padding:20px 24px 16px;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0}
+.followhdr h2{font-family:'Newsreader',serif;font-size:20px;font-weight:700;margin-bottom:4px}
+.followhdr p{font-size:13px;color:var(--text-2)}
+.ucards{padding:16px 20px;overflow-y:auto;flex:1}
+.ucard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;display:flex;align-items:center;gap:14px;margin-bottom:10px;box-shadow:var(--shadow);transition:all .2s}
+.ucard:hover{border-color:var(--ba)}
+.uav{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Newsreader',serif;font-weight:700;font-size:18px;color:#fff;flex-shrink:0}
+.uinfo{flex:1}.uinfo strong{display:block;font-weight:600;font-size:15px}.uinfo span{font-size:12px;color:var(--text-2)}
+.uhandle{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-3);margin-top:2px}
+.fbtn{background:var(--bg);border:1.5px solid var(--border);color:var(--text-1);padding:7px 18px;border-radius:var(--pill);font-size:13px;font-weight:600;transition:all .2s}
+.fbtn:hover{border-color:var(--accent);color:var(--accent)}.fbtn.on{background:var(--a10);border-color:var(--accent);color:var(--accent)}
+.sr{background:var(--surface);border-left:1px solid var(--border);overflow-y:auto;padding:16px}
+.sr::-webkit-scrollbar{width:3px}
+.srtitle{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--text-3);text-transform:uppercase;margin-bottom:12px}
+.srmp{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:16px}
+.srav{width:40px;height:40px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:'Newsreader',serif;font-weight:700;font-size:16px;color:#fff;margin-bottom:8px}
+.srn{font-weight:600;font-size:14px}.srh{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-3);margin-bottom:8px}
+.srsts{display:flex;gap:16px}.srst{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-3)}.srst strong{color:var(--text-1)}
+.srfl{display:flex;flex-direction:column;gap:4px;margin-bottom:16px}
+.srf{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:var(--r);font-size:13px;cursor:pointer;transition:all .15s;color:var(--text-2)}
+.srf:hover{background:var(--bg);color:var(--text-1)}
+.srf .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}.srf .cnt{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-3)}
+.srrc{display:flex;flex-direction:column;gap:6px}
+.sri{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px;font-size:12px;cursor:pointer;transition:all .15s}
+.sri:hover{border-color:var(--ba)}.sri strong{display:block;font-weight:600;margin-bottom:2px;font-size:13px}.sri span{color:var(--text-3);font-family:'JetBrains Mono',monospace;font-size:10px}
+.mobnav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);padding:8px 0 12px;z-index:50;justify-content:space-around}
+.mni{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;color:var(--text-3);padding:4px 16px;cursor:pointer;transition:color .15s}
+.mni.on{color:var(--accent)}.mnico{font-size:20px}
+.movl{display:none;position:fixed;inset:0;background:rgba(26,20,16,.5);backdrop-filter:blur(4px);z-index:100;align-items:center;justify-content:center}
+.movl.on{display:flex}
+.modal{background:var(--surface);border-radius:var(--rlg);padding:32px;max-width:380px;width:90%;box-shadow:var(--shadowlg)}
+.modal h3{font-family:'Newsreader',serif;font-size:22px;font-weight:700;margin-bottom:4px}
+.modal p{color:var(--text-2);font-size:14px;margin-bottom:24px}
+.mf{margin-bottom:14px}.mf label{display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.07em;margin-bottom:5px}
+.mf input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:11px 14px;font-size:14px;color:var(--text-1);outline:none;transition:border-color .2s}
+.mf input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--a10)}
+.msub{width:100%;background:var(--accent);color:#fff;padding:13px;border-radius:var(--pill);font-family:'Newsreader',serif;font-weight:700;font-size:16px;transition:all .2s;margin-top:8px}
+.msub:hover{background:#C8901E}
+.mclose{float:right;background:transparent;color:var(--text-3);font-size:20px;line-height:1;margin-top:-4px}
+.mclose:hover{color:var(--text-1)}
+#toast{position:fixed;bottom:24px;right:24px;z-index:200;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 18px;display:flex;align-items:center;gap:10px;box-shadow:var(--shadowlg);transform:translateY(10px);opacity:0;transition:all .3s;max-width:300px}
+#toast.on{transform:translateY(0);opacity:1}
+#toast .ti{font-size:18px}.tt strong{display:block;font-size:14px}.tt span{font-size:12px;color:var(--text-2)}
+.empty{text-align:center;padding:48px 24px;color:var(--text-3)}.empty .ei{font-size:48px;margin-bottom:16px;display:block}.empty p{font-size:14px;line-height:1.6}
+.fi{animation:fadeIn .3s ease forwards}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+<div id="toast"><span class="ti">✓</span><div class="tt"><strong id="tt"></strong><span id="ts"></span></div></div>
+<div class="movl" id="lmodal">
+  <div class="modal">
+    <button class="mclose" onclick="closel()">✕</button>
+    <h3>Entrar no UMENO</h3>
+    <p>Para salvar conteúdo você precisa estar logado.</p>
+    <div class="mf"><label>SENHA DE ACESSO</label><input type="password" id="lpwd" placeholder="Digite a senha" /></div>
+    <button class="msub" onclick="doLogin()">Entrar →</button>
+    <p style="font-size:12px;color:var(--text-3);margin-top:12px;text-align:center">Senha padrão: <code>umeno2024</code></p>
+  </div>
+</div>
+<div class="app">
+  <div class="topbar">
+    <div class="tlogo">ume<span>no</span></div>
+    <input class="tsearch" type="text" placeholder="Buscar em suas pastas…" id="si" oninput="doSearch(this.value)" />
+    <div class="tright">
+      <div id="tu" style="display:none;align-items:center;gap:8px"><div class="tav">L</div><span style="font-size:13px;color:var(--text-2)">Lucas</span></div>
+      <button class="lbtn" id="lb" onclick="openl()">Entrar</button>
+    </div>
+  </div>
+  <div class="sl" id="sl">
+    <div class="ni on" id="nn-perfil" onclick="sv('perfil')"><span class="ico">👤</span> Meu Perfil</div>
+    <div class="ni" id="nn-chat" onclick="sv('chat')"><span class="ico">✦</span> Salvar com IA</div>
+    <div class="ni" id="nn-feed" onclick="sv('feed')"><span class="ico">📰</span> Feed</div>
+    <div class="ni" id="nn-seguindo" onclick="sv('seguindo')"><span class="ico">👥</span> Seguindo</div>
+    <div class="ndiv"></div>
+    <div class="nsec">Pastas</div>
+    <div id="sfold"></div>
+    <div class="ndiv"></div>
+    <div class="ni" onclick="sv('nova')"><span class="ico">+</span> Nova pasta</div>
+  </div>
+  <div class="main" id="main">
+    <div class="view on" id="view-perfil">
+      <div class="pcov"></div>
+      <div class="pcovi">
+        <div class="pavwrap"><div class="pav">L</div></div>
+        <div class="pname">Lucas Silva de Carvalho</div>
+        <div class="phandle">@lucascarvalho · Belém do Pará</div>
+        <div class="pbio">Empreendedor e entusiasta de inovação. Construindo o futuro a partir da Amazônia.</div>
+        <div class="ploc">📍 Belém, Pará, Brasil</div>
+      </div>
+      <div class="pbody">
+        <div class="pstats">
+          <div class="pst"><strong id="si2">0</strong><span>itens salvos</span></div>
+          <div class="pst"><strong id="sf2">5</strong><span>pastas</span></div>
+          <div class="pst"><strong id="sfw">0</strong><span>seguindo</span></div>
+        </div>
+        <div class="sectitle">Pastas</div>
+        <div class="fgrid" id="fgrid"></div>
+        <div class="sectitle">Últimos salvos</div>
+        <div class="ifeed" id="pfeed"></div>
+      </div>
+    </div>
+    <div class="view" id="view-chat">
+      <div class="chatview">
+        <div class="chatheader">
+          <h3>✦ Salvar com IA</h3>
+          <p>Cole um link, escreva um pensamento, compartilhe uma ideia. A IA organiza nas pastas certas.</p>
+        </div>
+        <div class="chatmsgs" id="chatmsgs">
+          <div class="cmsg sys fi"><div class="cbub">Olá, Lucas! Cole um link, escreva um pensamento ou mande qualquer coisa. Vou organizar nas suas pastas automaticamente. 📁</div></div>
+        </div>
+        <div class="chatia">
+          <div class="ciawrap">
+            <textarea class="ciata" id="ci" placeholder="Cole um link, escreva uma ideia, compartilhe um pensamento…" rows="1" oninput="ar(this)" onkeydown="ck(event)"></textarea>
+            <button class="ciasend" id="csend" onclick="send()">→</button>
+          </div>
+          <div class="ciahint">Enter para enviar · Shift+Enter para nova linha</div>
+        </div>
+      </div>
+    </div>
+    <div class="view" id="view-feed">
+      <div class="feedhdr"><h2>Feed</h2><p style="font-size:13px;color:var(--text-2);margin-top:4px">Tudo que foi salvo recentemente</p></div>
+      <div style="padding:16px 20px;flex:1;overflow-y:auto"><div class="ifeed" id="feedlist"></div></div>
+    </div>
+    <div class="view" id="view-seguindo">
+      <div class="followhdr"><h2>Pessoas e perfis</h2><p>Siga outras pessoas para ver o que elas estão salvando.</p></div>
+      <div class="ucards" id="ucards"></div>
+    </div>
+    <div class="view" id="view-pasta">
+      <div class="fdhead" id="fdhead"></div>
+      <div class="fitems">
+        <button class="backbtn" onclick="sv('perfil')">← Voltar</button>
+        <div class="ifeed" id="ffeed"></div>
+      </div>
+    </div>
+    <div class="view" id="view-nova">
+      <div style="padding:32px;max-width:480px">
+        <h2 style="font-family:'Newsreader',serif;font-size:24px;font-weight:700;margin-bottom:8px">Nova pasta</h2>
+        <p style="color:var(--text-2);margin-bottom:28px;font-size:14px">Crie uma pasta para organizar seus conteúdos.</p>
+        <div class="mf"><label>NOME DA PASTA</label><input type="text" id="nfn" placeholder="ex: Leituras, Projetos, Viagens…" /></div>
+        <div class="mf"><label>EMOJI</label><input type="text" id="nfe" placeholder="📁" maxlength="2" style="width:80px" /></div>
+        <div class="mf"><label>DESCRIÇÃO (opcional)</label><input type="text" id="nfd" placeholder="Para que serve essa pasta?" /></div>
+        <button class="msub" style="width:auto;padding:12px 32px" onclick="criarPasta()">Criar pasta →</button>
+      </div>
+    </div>
+  </div>
+  <div class="sr">
+    <div class="srtitle">Seu perfil</div>
+    <div class="srmp">
+      <div class="srav">L</div>
+      <div class="srn">Lucas Silva de Carvalho</div>
+      <div class="srh">@lucascarvalho</div>
+      <div class="srsts"><div class="srst"><strong id="sri2">0</strong> itens</div><div class="srst"><strong id="srfw">0</strong> seguindo</div></div>
+    </div>
+    <div class="srtitle">Pastas rápidas</div>
+    <div class="srfl" id="srfl"></div>
+    <div class="srtitle" style="margin-top:16px">Salvos recentes</div>
+    <div class="srrc" id="srrc"></div>
+  </div>
+</div>
+<div class="mobnav" id="mobnav">
+  <div class="mni on" onclick="sv('perfil');ma(this)"><span class="mnico">👤</span><span>Perfil</span></div>
+  <div class="mni" onclick="sv('feed');ma(this)"><span class="mnico">📰</span><span>Feed</span></div>
+  <div class="mni" onclick="sv('chat');ma(this)"><span class="mnico">✦</span><span>Salvar</span></div>
+  <div class="mni" onclick="sv('seguindo');ma(this)"><span class="mnico">👥</span><span>Seguindo</span></div>
+</div>
+<script>
+const CFG={SB_URL:'https://valtpjzdzxxtdsgabesq.supabase.co',SB_KEY:'sb_publishable_bGgHiU1E3SLHr414oW7bnA_leVGVDx3',CL_KEY:'SUA_CHAVE_ANTHROPIC_AQUI',PWD:'umeno2024'};
+const $=id=>document.getElementById(id);
+let S={logado:false,pastas:[],itens:[],following:JSON.parse(localStorage.getItem('umf')||'[]')};
+const PD=[
+  {id:'empreendedorismo',nome:'Empreendedorismo',emoji:'🚀',cor:'#D4845A',descricao:'Ideias, referências e insights de negócios',publica:true},
+  {id:'inovacao',nome:'Inovação',emoji:'💡',cor:'#4A7FA5',descricao:'Tendências, tecnologia e futuro',publica:true},
+  {id:'belem',nome:'Belém do Pará',emoji:'🌳',cor:'#2E7D52',descricao:'Lugares, eventos e referências locais',publica:true},
+  {id:'tecnologia',nome:'Tecnologia',emoji:'⚡',cor:'#8B5E9E',descricao:'Tools, apps e recursos técnicos',publica:true},
+  {id:'negocios',nome:'Negócios',emoji:'💼',cor:'#7A6E32',descricao:'Estratégias, cases e frameworks',publica:true}
+];
+const UT=[
+  {id:'u1',nome:'Ana Beatriz',handle:'@anabeatriz',bio:'Designer e empreendedora · Belém',cor:'#C4627A',pastas:8,itens:45},
+  {id:'u2',nome:'Pedro Matos',handle:'@pedromatos',bio:'Dev e founder · Startup de agro',cor:'#4A7FA5',pastas:12,itens:89},
+  {id:'u3',nome:'Carla Souza',handle:'@carlasouza',bio:'Inovação social · Amazônia',cor:'#2E7D52',pastas:6,itens:34},
+  {id:'u4',nome:'Rafael Lima',handle:'@rafaellima',bio:'Marketing e growth · Belém',cor:'#D4845A',pastas:15,itens:120}
+];
+function toast(t,s='',i='✓'){$('tt').textContent=t;$('ts').textContent=s;$('toast').querySelector('.ti').textContent=i;$('toast').classList.add('on');setTimeout(()=>$('toast').classList.remove('on'),3500)}
+function ago(ts){const d=Date.now()-ts;if(d<60000)return'agora';if(d<3600000)return Math.floor(d/60000)+'min atrás';if(d<86400000)return Math.floor(d/3600000)+'h atrás';return Math.floor(d/86400000)+'d atrás'}
+function ar(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px'}
+function pc(p){const m={youtube:'#FF0000',instagram:'linear-gradient(135deg,#F58529,#DD2A7B)',whatsapp:'#25D366',twitter:'#000',x:'#000',linkedin:'#0077B5',spotify:'#1DB954',tiktok:'#010101',maps:'#34A853',link:'#B87A18',texto:'#7A6E62'};return m[p]||'#B87A18'}
+function pi(p){const m={youtube:'▶',instagram:'📷',whatsapp:'💬',twitter:'𝕏',x:'𝕏',linkedin:'in',spotify:'♪',tiktok:'♪',maps:'📍',link:'🔗',texto:'✍️',foto:'🖼️',audio:'🎙️'};return m[p]||'📎'}
+async function sbf(path,method='GET',body=null){const o={method,headers:{'apikey':CFG.SB_KEY,'Authorization':'Bearer '+CFG.SB_KEY,'Content-Type':'application/json','Prefer':method==='POST'?'return=representation':'return=minimal'}};if(body)o.body=JSON.stringify(body);const r=await fetch(CFG.SB_URL+'/rest/v1/'+path,o);if(method==='GET')return r.json();return r}
+async function loadPastas(){try{const d=await sbf('pastas?select=*&order=criado_em.asc');if(d&&d.length>0)S.pastas=d;else S.pastas=PD}catch(e){S.pastas=PD}renderSidebar();renderFGrid()}
+async function loadItens(){try{const d=await sbf('itens?select=*&order=criado_em.desc&limit=50');if(d&&Array.isArray(d)){S.itens=d;$('si2').textContent=d.length;$('sri2').textContent=d.length;renderPFeed();renderFeedList();renderSrRec()}}catch(e){}}
+async function saveItem(item){try{const r=await sbf('itens','POST',item);const s=await r.json();const ni=Array.isArray(s)?s[0]:{...item,id:Date.now(),criado_em:new Date().toISOString()};S.itens.unshift(ni);upCounts();renderPFeed();renderFeedList();renderSrRec();return ni}catch(e){const ni={...item,id:Date.now(),criado_em:new Date().toISOString()};S.itens.unshift(ni);upCounts();renderPFeed();renderFeedList();renderSrRec();return ni}}
+async function savePasta(p){try{await sbf('pastas','POST',p)}catch(e){}S.pastas.push(p);$('sf2').textContent=S.pastas.length;renderSidebar();renderFGrid()}
+function upCounts(){$('si2').textContent=S.itens.length;$('sri2').textContent=S.itens.length}
+async function classify(msg){if(!CFG.CL_KEY||CFG.CL_KEY==='SUA_CHAVE_ANTHROPIC_AQUI')return localClassify(msg);try{const ps=S.pastas.map(p=>'- '+p.nome+' '+p.emoji).join('\n');const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':CFG.CL_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:400,messages:[{role:'user',content:'Organize para Lucas Silva de Carvalho, empreendedor de Belém do Pará.\n\nMensagem: "'+msg+'"\n\nPastas:\n'+ps+'\n\nResponda APENAS JSON:\n{"pasta":"nome exato","titulo":"título curto","descricao":"resumo","tags":["tag1","tag2"],"tipo":"link|texto","plataforma":"youtube|instagram|twitter|linkedin|spotify|maps|texto|link"}'}]}});const d=await r.json();const t=d.content?.[0]?.text||'';return JSON.parse(t.replace(/```json|```/g,'').trim())}catch(e){return localClassify(msg)}}
+function localClassify(msg){const m=msg.toLowerCase();let pasta='Empreendedorismo',plat='texto',tipo='texto';if(m.includes('youtube.com')||m.includes('youtu.be')){plat='youtube';tipo='link'}else if(m.includes('instagram.com')){plat='instagram';tipo='link'}else if(m.includes('linkedin.com')){plat='linkedin';tipo='link'}else if(m.includes('spotify.com')){plat='spotify';tipo='link'}else if(m.includes('http')){plat='link';tipo='link'}if(m.includes('belém')||m.includes('belem')||m.includes('pará')||m.includes('amazônia'))pasta='Belém do Pará';else if(m.includes('tech')||m.includes('código')||m.includes('app')||m.includes('software')||m.includes('ia'))pasta='Tecnologia';else if(m.includes('inovação')||m.includes('futuro')||m.includes('tendência'))pasta='Inovação';else if(m.includes('negócio')||m.includes('estratégia')||m.includes('mercado'))pasta='Negócios';const url=msg.match(/https?:\/\/[^\s]+/)?.[0]||null;return{pasta,titulo:msg.length>60?msg.slice(0,57)+'...':msg,descricao:'Salvo via UMENO',tags:[pasta.toLowerCase().replace(/ /g,'-')],tipo,plataforma:plat,url}}
+function openl(){$('lmodal').classList.add('on');setTimeout(()=>$('lpwd').focus(),100)}
+function closel(){$('lmodal').classList.remove('on')}
+function doLogin(){const p=$('lpwd').value;if(p===CFG.PWD){S.logado=true;closel();$('lb').style.display='none';$('tu').style.display='flex';toast('Bem-vindo, Lucas!','Você está logado','👋');localStorage.setItem('uml','1')}else{toast('Senha incorreta','Tente novamente','✗');$('lpwd').focus()}}
+$('lpwd').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+if(localStorage.getItem('uml')==='1'){S.logado=true;$('lb').style.display='none';$('tu').style.display='flex'}
+function sv(v){document.querySelectorAll('.view').forEach(e=>e.classList.remove('on'));document.querySelectorAll('.ni').forEach(e=>e.classList.remove('on'));const ve=$('view-'+v);if(ve)ve.classList.add('on');const ne=$('nn-'+v);if(ne)ne.classList.add('on');if(v==='chat'&&!S.logado){openl();return}if(v==='nova'&&!S.logado){openl();return}if(v==='feed')renderFeedList();if(v==='seguindo')renderUCards()}
+function ma(el){document.querySelectorAll('.mni').forEach(i=>i.classList.remove('on'));el.classList.add('on')}
+function showFolder(id){const p=S.pastas.find(x=>x.id===id||x.nome===id);if(!p)return;const cor=p.cor||'#B87A18';$('fdhead').innerHTML=`<div class="fdtop"><div class="fdtico" style="background:${cor}20">${p.emoji||'📁'}</div><div><div class="fdtn">${p.nome}</div><div class="fdtd">${p.descricao||''}</div></div></div><div class="fdtm"><span>${itensDaPasta(p.nome).length} itens</span><span>${p.publica?'🌍 pública':'🔒 privada'}</span></div>`;const itens=itensDaPasta(p.nome);const feed=$('ffeed');feed.innerHTML='';if(!itens.length){feed.innerHTML=`<div class="empty"><span class="ei">${p.emoji}</span><p>Nenhum item em <strong>${p.nome}</strong> ainda.<br>Use o chat com IA para começar.</p></div>`}else{itens.forEach(i=>feed.appendChild(mkCard(i)))}sv('pasta')}
+function itensDaPasta(n){return S.itens.filter(i=>{const p=S.pastas.find(p=>p.id===i.pasta_id);return p?.nome===n||i.pasta_nome===n})}
+function mkCard(item){const el=document.createElement('div');el.className='icard fi';const pl=item.plataforma||'texto';const cor=pc(pl);const ico=pi(item.tipo||pl);const tags=(item.tags||[]).map(t=>`<span class="itag">#${t}</span>`).join('');const tempo=item.criado_em?ago(new Date(item.criado_em).getTime()):'agora';const pn=item.pasta_nome||(S.pastas.find(p=>p.id===item.pasta_id)?.nome)||'';el.innerHTML=`<div class="icardtop"><div class="iplat" style="background:${cor}">${ico}</div><div style="flex:1"><div class="ititle">${item.titulo||item.conteudo?.slice(0,60)||'Item salvo'}</div></div></div>${item.descricao?`<div class="idesc">${item.descricao}</div>`:''} ${item.url?`<div style="font-size:12px;color:var(--text-3);font-family:'JetBrains Mono',monospace;margin-bottom:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${item.url}</div>`:''}<div class="imeta">${tags}${pn?`<span class="ifchip">📁 ${pn}</span>`:''}<span class="itime">${tempo}</span></div>`;return el}
+function renderFGrid(){const g=$('fgrid');if(!g)return;g.innerHTML='';S.pastas.forEach(p=>{const cnt=itensDaPasta(p.nome).length;const c=document.createElement('div');c.className='fc';c.style.setProperty('--fcc',p.cor||'#B87A18');c.innerHTML=`<div class="fci">${p.emoji||'📁'}</div><div class="fcn">${p.nome}</div><div class="fcm"><span>${cnt} itens</span><span class="badge ${p.publica?'pub':'priv'}">${p.publica?'público':'privado'}</span></div>`;c.onclick=()=>showFolder(p.id||p.nome);g.appendChild(c)})}
+function renderSidebar(){const sl=$('sfold'),sr=$('srfl');if(!sl)return;sl.innerHTML='';if(sr)sr.innerHTML='';S.pastas.forEach(p=>{const cnt=itensDaPasta(p.nome).length;const d=document.createElement('div');d.className='fni';d.innerHTML=`<span class="fdot" style="background:${p.cor||'#B87A18'}"></span>${p.emoji} ${p.nome}<span class="fcnt">${cnt}</span>`;d.onclick=()=>showFolder(p.id||p.nome);sl.appendChild(d);if(sr){const s=document.createElement('div');s.className='srf';s.innerHTML=`<span class="dot" style="background:${p.cor||'#B87A18'}"></span>${p.emoji} ${p.nome}<span class="cnt">${cnt}</span>`;s.onclick=()=>showFolder(p.id||p.nome);sr.appendChild(s)}})}
+function renderPFeed(){const f=$('pfeed');if(!f)return;f.innerHTML='';const r=S.itens.slice(0,6);if(!r.length){f.innerHTML='<div class="empty"><span class="ei">✦</span><p>Nada salvo ainda.<br>Use o <strong>chat com IA</strong> para começar.</p></div>';return}r.forEach(i=>f.appendChild(mkCard(i)))}
+function renderFeedList(){const f=$('feedlist');if(!f)return;f.innerHTML='';if(!S.itens.length){f.innerHTML='<div class="empty"><span class="ei">📰</span><p>Seu feed está vazio.</p></div>';return}S.itens.forEach(i=>f.appendChild(mkCard(i)))}
+function renderSrRec(){const el=$('srrc');if(!el)return;el.innerHTML='';S.itens.slice(0,4).forEach(i=>{const d=document.createElement('div');d.className='sri';d.innerHTML=`<strong>${i.titulo||'Item salvo'}</strong><span>${ago(new Date(i.criado_em||Date.now()).getTime())}</span>`;el.appendChild(d)})}
+function renderUCards(){const el=$('ucards');if(!el)return;el.innerHTML='';UT.forEach(u=>{const f=S.following.includes(u.id);const c=document.createElement('div');c.className='ucard fi';c.innerHTML=`<div class="uav" style="background:${u.cor}">${u.nome[0]}</div><div class="uinfo"><strong>${u.nome}</strong><span>${u.bio}</span><div class="uhandle">${u.handle} · ${u.pastas} pastas · ${u.itens} itens</div></div><button class="fbtn ${f?'on':''}" onclick="toggleFollow('${u.id}',this)">${f?'✓ Seguindo':'+ Seguir'}</button>`;el.appendChild(c)})}
+function toggleFollow(id,btn){const idx=S.following.indexOf(id);const u=UT.find(x=>x.id===id);if(idx>=0){S.following.splice(idx,1);btn.textContent='+ Seguir';btn.classList.remove('on');toast('Deixou de seguir '+u?.nome,'','—')}else{S.following.push(id);btn.textContent='✓ Seguindo';btn.classList.add('on');toast('Seguindo '+u?.nome,'Você verá o conteúdo dela no feed','✓')}localStorage.setItem('umf',JSON.stringify(S.following));$('sfw').textContent=S.following.length;$('srfw').textContent=S.following.length}
+function ck(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}}
+async function send(){if(!S.logado){openl();return}const input=$('ci');const msg=input.value.trim();if(!msg)return;input.value='';input.style.height='auto';addMsg(msg,'user');const te=addTyping();try{const r=await classify(msg);te.remove();const p=S.pastas.find(x=>x.nome===r.pasta)||S.pastas[0];const item={pasta_id:p?.id||null,pasta_nome:r.pasta,tipo:r.tipo||'texto',conteudo:msg,url:r.url||(msg.match(/https?:\/\/[^\s]+/)?.[0]||null),titulo:r.titulo,descricao:r.descricao,tags:r.tags||[],plataforma:r.plataforma||'texto',origem:'chat'};await saveItem(item);const el=document.createElement('div');el.className='cmsg ai fi';const tgs=(r.tags||[]).map(t=>'#'+t).join(' ');el.innerHTML=`<div class="cbub">Organizado!<div class="saved-box" style="margin-top:8px"><strong>📁 ${r.pasta}</strong><br>📌 ${r.titulo}<br>${r.descricao?'💬 '+r.descricao+'<br>':''}🏷️ ${tgs}</div></div><div class="ctime">✦ IA · agora</div>`;$('chatmsgs').appendChild(el);scrollC();toast('Salvo em '+r.pasta,r.titulo,'✅')}catch(e){te.remove();addMsg('Ops, algo deu errado. Tente novamente.','sys')}}
+function addMsg(t,tp){const el=document.createElement('div');el.className='cmsg '+tp+' fi';el.innerHTML=`<div class="cbub">${t}</div>${tp==='user'?'<div class="ctime">você · agora</div>':''}`;$('chatmsgs').appendChild(el);scrollC();return el}
+function addTyping(){const el=document.createElement('div');el.className='cmsg ai fi';el.innerHTML='<div class="typing"><div class="tdot"></div><div class="tdot"></div><div class="tdot"></div></div>';$('chatmsgs').appendChild(el);scrollC();return el}
+function scrollC(){const m=$('chatmsgs');m.scrollTop=m.scrollHeight}
+async function criarPasta(){if(!S.logado){openl();return}const nome=$('nfn').value.trim();const emoji=$('nfe').value.trim()||'📁';const desc=$('nfd').value.trim();if(!nome){toast('Digite um nome para a pasta','','⚠️');return}const cores=['#D4845A','#4A7FA5','#5A9E6F','#8B5E9E','#4A7A6A','#A07840','#C4627A','#2E7D52'];const cor=cores[Math.floor(Math.random()*cores.length)];await savePasta({nome,emoji,cor,descricao:desc,publica:true});$('nfn').value='';$('nfe').value='';$('nfd').value='';toast('Pasta "'+nome+'" criada!','Comece salvando conteúdo','📁');sv('perfil')}
+function doSearch(q){if(!q.trim()){renderPFeed();return}const r=S.itens.filter(i=>(i.titulo||'').toLowerCase().includes(q.toLowerCase())||(i.descricao||'').toLowerCase().includes(q.toLowerCase())||(i.conteudo||'').toLowerCase().includes(q.toLowerCase())||(i.tags||[]).some(t=>t.toLowerCase().includes(q.toLowerCase())));const f=$('pfeed');f.innerHTML='';if(!r.length){f.innerHTML=`<div class="empty"><span class="ei">🔍</span><p>Nenhum resultado para "<strong>${q}</strong>"</p></div>`;return}r.forEach(i=>f.appendChild(mkCard(i)));sv('perfil')}
+async function init(){await loadPastas();await loadItens();$('sfw').textContent=S.following.length;$('srfw').textContent=S.following.length;renderUCards()}
+init();
+</script>
+</body>
+</html>
